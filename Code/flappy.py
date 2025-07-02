@@ -234,70 +234,86 @@ class FlappyGame:
                     dummy_pipe.rect.y = random.randint(100, 300)
                     dummy_pipe.update = lambda p=dummy_pipe: setattr(p.rect, 'x', p.rect.x - GAME_SPEED)
                     self.pipe_group.add(dummy_pipe)
-            reward = 1
-
-        #Spiel abbrechen wenn Vogel oben aus dem Bild rausfliegt
-        if (self.bird.rect.y <= 0):
-            self.done = True
-            reward = -1
-
-        # Kollision im Render-Modus
-        if self.render and (
-            pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
-            pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False, pygame.sprite.collide_mask)
-        ):
-            self.done = True
-            reward = -1
 
         #TODO: reward methoden später auslagern
           
-        reward = 0.1   #reward fürs existieren damit der agent länger lebt
+        #reward initialisieren
+        reward = 0
 
+        #reward fürs existieren damit der agent länger lebt
+        reward += 0.1
+
+        #reward für die anzahl der durchquerten pipes, höhere anzahl = höherer reward
         def reward_pipes_strike():
-           return self.num_passed_pipes #reward für die anzahl der durchquerten pipes, höhere anzahl = höherer reward
+           return self.num_passed_pipes
 
-        for pipe in self.pipe_group: #reward sofort nach dem durchqueren einer pipe
+        #reward sofort nach dem durchqueren einer pipe
+        for pipe in self.pipe_group:
             if pipe.rect.right < self.bird.rect.left and pipe not in self.passed_pipes:
                 self.passed_pipes.append(pipe)
                 self.num_passed_pipes += 1
                 reward += 2
-                reward += reward_pipes_strike()  #reward für das gestaffelte durchqueren der pipes
+                reward += reward_pipes_strike() #reward für das gestaffelte durchqueren der pipes
 
-        #höherer reward, wenn vogel sich der mitte der pipe nähert
+        #höherer reward, wenn vogel sich der mitte der nächsten beiden pipes nähert
         pipes = self.pipe_group.sprites() #länge 4
 
         upper_next_pipe = self.pipe_group.sprites()[0]
         lower_next_pipe = self.pipe_group.sprites()[1]
 
-        #mittelpunkt der pipe
-        #center_next_pipe_x_right = upper_next_pipe.rect.centerx
+        #mittelpunkt zweier pipes
         center_next_pipe_x = (upper_next_pipe.rect.left + upper_next_pipe.rect.right) / 2
         center_next_pipe_y = (upper_next_pipe.rect.top + lower_next_pipe.rect.bottom) / 2
 
-        #distanz vogel und center der pipe
-        #eukldische distanz (omg clustering hat was gebracht)
+        #distanz vogel und mittelpunkt zweier pipes
+        #eukldische distanz
         distance = math.sqrt((self.bird.rect.centerx - center_next_pipe_x)**2 + (self.bird.rect.centery - center_next_pipe_y)**2)
 
         reward += 100 / (distance + 1) #je näher der vogel an der mitte der pipe ist, desto höher der reward
 
-        #reward, wenn sich der vogel mittig im bildschirm befindet
+        #reward, wenn sich der vogel mittig im bildschirm befindet und falls er zu sehr am rand ist, gibt es eine strafe
         if 100 < self.bird.rect.centery < 400:
             reward += 0.5
         else:
             reward += -1
 
-        #weiteres
-        #wenn vogel sehr nah an pipe fliegt, gibt es eine kleine strafe -> mittelpunkt der einzelnen pipes nehmen (nicht die lücke)
-        #gleichmäßiges fliegen wird belohnt -> wenn delta y klein ist, ist das gut
+        #strafe nach dem überqschreiten der mitte der pipes
+        middle_pipe_x = abs(self.bird.rect.centerx - upper_next_pipe.rect.centerx)
 
-        if (is_off_screen(self.bird_group.sprites()[0])):
+        passed_upper_middle = self.bird.rect.centery >= upper_next_pipe.rect.centery - 100 #problem hierbei: es wird nicht richtig die mitte der pipe betrachtet 
+        passed_lower_middle = self.bird.rect.centery <= lower_next_pipe.rect.centery + 100 #wahrscheinlich liegt es daran, dass die mitte der sprite des pipes betrachtet wird
+
+        #if passed_upper_middle or passed_lower_middle:
+        #    reward -= (3 + (150 / (middle_pipe_x + 1))) #wenn vogel sich dabei der x position der pipe nähert, erhöht sich diese strafe
+
+        #zweiter ansatz (die mitte einer pipe wird nun anhand des mittelpunktes beider pipes betrachtet)
+        passed_upper_middle_2 = self.bird.rect.centery >= (center_next_pipe_y + 150)
+        passed_lower_middle_2 = self.bird.rect.centery <= (center_next_pipe_y - 150)
+        
+        if passed_upper_middle_2 or passed_lower_middle_2:
+            reward -= (3 + (150 / (middle_pipe_x + 1))) #wenn vogel sich dabei der x position der pipe nähert, erhöht sich diese strafe
+
+        # Kollision im Render-Modus
+        if self.render and (pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
+            pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False, pygame.sprite.collide_mask)):
             self.done = True
-            reward = -10  #wenn vogel aus dem spiel rausfliegt strafe und game beenden
+            reward = -10
 
+        # Kollision im nicht Render-Modus
         if (pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
             pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False, pygame.sprite.collide_mask)):
             self.done = True
             reward = -10  #wenn vogel mit boden oder pipe collidiert, strafe
+
+        #Spiel abbrechen wenn Vogel oben aus dem Bild rausfliegt
+        if (self.bird.rect.y <= 0):
+            self.done = True
+            reward = -10
+
+        #wenn vogel aus dem spiel rausfliegt strafe und game beenden
+        if (is_off_screen(self.bird_group.sprites()[0])):
+            self.done = True
+            reward = -10 
 
         # [OPTIMIERUNG] Rendering nur bei render=True
         if self.render:
@@ -312,3 +328,24 @@ class FlappyGame:
             self.clock.tick(15)
         return self.get_state(), reward, self.done
     
+def play():
+    game = FlappyGame()
+    state = game.reset()
+    done = False
+    gesamtReward = 0
+    while not done:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_SPACE or event.key == K_UP:
+                    state, reward, done = game.step(1)
+                    gesamtReward += reward
+                    continue
+    
+
+        state, reward, done = game.step(0)
+        gesamtReward += reward
+        #print(gesamtReward)
+        print(reward)
+    pygame.quit()
+         
+play()
