@@ -3,13 +3,26 @@ import psutil
 import pygame
 from flappy import FlappyGame
 from cpu_tracker import CPUTracker
-
+import matplotlib.pyplot as plt
 
 class RuleAgent:
+    def __init__(self):
+        self.rewards = []
+
     def act(self, observation):
         bird_y, pipe_x, top_y, bot_y = observation
         gap_center = (top_y + bot_y) / 2
         return 1 if bird_y > gap_center else 0
+    
+    def reward(self, reward_value):
+        self.rewards.append(reward_value)
+
+    def plot_rewards(self):
+        plt.plot(self.rewards)
+        plt.title("Rewards über die Schritte")
+        plt.xlabel("Schritt")
+        plt.ylabel("Reward")
+        plt.show()
 
 def play(agent, render, max_steps=100, no_progress_limit=150):
     game = FlappyGame(render=render)
@@ -33,6 +46,10 @@ def play(agent, render, max_steps=100, no_progress_limit=150):
         gesamtReward += reward
         gesamtStep += 1
 
+        # Reward-Tracking
+        agent.reward(reward)
+
+        # CPU-Tracking
         cpu_tracker.track()
 
         ram_mb = process.memory_info().rss / (1024 * 1024)
@@ -65,6 +82,8 @@ def play(agent, render, max_steps=100, no_progress_limit=150):
 
     cpu_tracker.plot()
 
+    # Plotten des Rewards
+    agent.plot_rewards()
 
 # Beispiel-Aufruf
 if __name__ == "__main__":
