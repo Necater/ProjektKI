@@ -3,7 +3,7 @@ import psutil
 import pygame
 from flappy import FlappyGame
 from cpu_tracker import CPUTracker
-
+from rewards_tracker import RewardTracker
 
 class RuleAgent:
     def act(self, observation):
@@ -21,6 +21,8 @@ def play(agent, render, max_steps=100, no_progress_limit=150):
     cpu_tracker = CPUTracker()
     process = psutil.Process()
 
+    reward_tracker = RewardTracker()
+
     last_reward_step = 0
     step_durations = []
     ram_usages = []
@@ -33,6 +35,10 @@ def play(agent, render, max_steps=100, no_progress_limit=150):
         gesamtReward += reward
         gesamtStep += 1
 
+        # Reward-Tracking
+        reward_tracker.add_reward(reward)
+
+        # CPU-Tracking
         cpu_tracker.track()
 
         ram_mb = process.memory_info().rss / (1024 * 1024)
@@ -65,6 +71,8 @@ def play(agent, render, max_steps=100, no_progress_limit=150):
 
     cpu_tracker.plot()
 
+    # Plotten des Rewards
+    reward_tracker.plot_rewards()
 
 # Beispiel-Aufruf
 if __name__ == "__main__":
