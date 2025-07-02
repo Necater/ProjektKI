@@ -194,6 +194,99 @@ class FlappyGame:
         top_pipe_y = next_pipes[1].rect.bottom
         bot_pipe_y = next_pipes[0].rect.top
         return [bird_y_position, next_pipes[0].rect.x, top_pipe_y, bot_pipe_y]
+    
+    # --- Reward-Methoden ---
+
+    # Reward fürs Überleben
+    def reward_exist(self):
+        return 0.1
+    
+    # Reward für die Anzahl der durchquerten Pipes, höhere Anzahl = höherer Reward
+    def reward_pipes_strike(self):
+        return self.num_passed_pipes
+    
+    # Reward sofort nach dem Durchqueren einer Pipe
+    def reward_for_passing_pipes(self):
+        reward = 0
+        for pipe in self.pipe_group:
+            if pipe.rect.right < self.bird.rect.left and pipe not in self.passed_pipes:
+                self.passed_pipes.append(pipe)
+                self.num_passed_pipes += 1
+                reward += 2
+                reward += self.reward_pipes_strike()  # Reward für das gestaffelte Durchqueren der Pipes
+        return reward
+    
+    # Höherer Reward, wenn Vogel sich der Mitte der nächsten beiden Pipes nähert
+    def reward_for_centering_between_pipes(self):
+        pipes = self.pipe_group.sprites()  # Länge 4
+        upper_next_pipe = pipes[0]
+        lower_next_pipe = pipes[1]
+
+        # Mittelpunkt zweier Pipes
+        center_next_pipe_x = (upper_next_pipe.rect.left + upper_next_pipe.rect.right) / 2
+        center_next_pipe_y = (upper_next_pipe.rect.top + lower_next_pipe.rect.bottom) / 2
+
+        # Distanz Vogel und Mittelpunkt zweier Pipes
+        # Euklidische Distanz
+        distance = math.sqrt((self.bird.rect.centerx - center_next_pipe_x) ** 2 + (self.bird.rect.centery - center_next_pipe_y) ** 2)
+
+        return 100 / (distance + 1)  # Je näher der Vogel an der Mitte der Pipe ist, desto höher der Reward
+    
+    # Reward, wenn sich der Vogel mittig im Bildschirm befindet und falls er zu sehr am Rand ist, gibt es eine Strafe
+    def reward_for_vertical_position(self):
+        if 100 < self.bird.rect.centery < 400:
+            return 0.5
+        else:
+            return -1
+        
+     # Strafe nach dem Überschreiten der Mitte der Pipes erster Ansatz
+    def penalty_for_passing_pipe_middle_first_approach(self):
+        pipes = self.pipe_group.sprites()
+        upper_next_pipe = pipes[0]
+        lower_next_pipe = pipes[1]
+
+        middle_pipe_x = abs(self.bird.rect.centerx - upper_next_pipe.rect.centerx)
+
+        passed_upper_middle = self.bird.rect.centery >= upper_next_pipe.rect.centery - 100  # Problem hierbei: Es wird nicht richtig die Mitte der Pipe betrachtet
+        passed_lower_middle = self.bird.rect.centery <= lower_next_pipe.rect.centery + 100  # Wahrscheinlich liegt es daran, dass die Mitte der Sprite des Pipes betrachtet wird
+
+        if passed_upper_middle or passed_lower_middle:
+            return -(3 + (150 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+        else:
+            return 0
+
+    # Strafe nach dem Überschreiten der Mitte der Pipes zweiter Ansatz
+    def penalty_for_passing_pipe_middle(self):
+        pipes = self.pipe_group.sprites()
+        upper_next_pipe = pipes[0]
+        lower_next_pipe = pipes[1]
+
+        middle_pipe_x = abs(self.bird.rect.centerx - upper_next_pipe.rect.centerx)
+
+        # Zweiter Ansatz (die Mitte einer Pipe wird nun anhand des Mittelpunktes beider Pipes betrachtet)
+        center_next_pipe_y = (upper_next_pipe.rect.top + lower_next_pipe.rect.bottom) / 2
+
+        passed_upper_middle_2 = self.bird.rect.centery >= (center_next_pipe_y + 150)
+        passed_lower_middle_2 = self.bird.rect.centery <= (center_next_pipe_y - 150)
+
+        if passed_upper_middle_2 or passed_lower_middle_2:
+            return -(3 + (150 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+        else:
+            return 0
+        
+    # Gesamt-Reward-Berechnung
+    def calculate_reward(self):
+        reward = 0 # Initialisierung des Rewards
+
+        reward += self.reward_exist()
+        reward += self.reward_for_passing_pipes()
+        reward += self.reward_for_centering_between_pipes()
+        reward += self.reward_for_vertical_position()
+        reward += self.penalty_for_passing_pipe_middle()
+
+        return reward
+        
+    # --- Reward-Methoden Ende ---
 
     def step(self, action):
         if action == 1:
@@ -235,63 +328,8 @@ class FlappyGame:
                     dummy_pipe.update = lambda p=dummy_pipe: setattr(p.rect, 'x', p.rect.x - GAME_SPEED)
                     self.pipe_group.add(dummy_pipe)
 
-        #TODO: reward methoden später auslagern
-          
-        #reward initialisieren
-        reward = 0
-
-        #reward fürs existieren damit der agent länger lebt
-        reward += 0.1
-
-        #reward für die anzahl der durchquerten pipes, höhere anzahl = höherer reward
-        def reward_pipes_strike():
-           return self.num_passed_pipes
-
-        #reward sofort nach dem durchqueren einer pipe
-        for pipe in self.pipe_group:
-            if pipe.rect.right < self.bird.rect.left and pipe not in self.passed_pipes:
-                self.passed_pipes.append(pipe)
-                self.num_passed_pipes += 1
-                reward += 2
-                reward += reward_pipes_strike() #reward für das gestaffelte durchqueren der pipes
-
-        #höherer reward, wenn vogel sich der mitte der nächsten beiden pipes nähert
-        pipes = self.pipe_group.sprites() #länge 4
-
-        upper_next_pipe = self.pipe_group.sprites()[0]
-        lower_next_pipe = self.pipe_group.sprites()[1]
-
-        #mittelpunkt zweier pipes
-        center_next_pipe_x = (upper_next_pipe.rect.left + upper_next_pipe.rect.right) / 2
-        center_next_pipe_y = (upper_next_pipe.rect.top + lower_next_pipe.rect.bottom) / 2
-
-        #distanz vogel und mittelpunkt zweier pipes
-        #eukldische distanz
-        distance = math.sqrt((self.bird.rect.centerx - center_next_pipe_x)**2 + (self.bird.rect.centery - center_next_pipe_y)**2)
-
-        reward += 100 / (distance + 1) #je näher der vogel an der mitte der pipe ist, desto höher der reward
-
-        #reward, wenn sich der vogel mittig im bildschirm befindet und falls er zu sehr am rand ist, gibt es eine strafe
-        if 100 < self.bird.rect.centery < 400:
-            reward += 0.5
-        else:
-            reward += -1
-
-        #strafe nach dem überqschreiten der mitte der pipes
-        middle_pipe_x = abs(self.bird.rect.centerx - upper_next_pipe.rect.centerx)
-
-        passed_upper_middle = self.bird.rect.centery >= upper_next_pipe.rect.centery - 100 #problem hierbei: es wird nicht richtig die mitte der pipe betrachtet 
-        passed_lower_middle = self.bird.rect.centery <= lower_next_pipe.rect.centery + 100 #wahrscheinlich liegt es daran, dass die mitte der sprite des pipes betrachtet wird
-
-        #if passed_upper_middle or passed_lower_middle:
-        #    reward -= (3 + (150 / (middle_pipe_x + 1))) #wenn vogel sich dabei der x position der pipe nähert, erhöht sich diese strafe
-
-        #zweiter ansatz (die mitte einer pipe wird nun anhand des mittelpunktes beider pipes betrachtet)
-        passed_upper_middle_2 = self.bird.rect.centery >= (center_next_pipe_y + 150)
-        passed_lower_middle_2 = self.bird.rect.centery <= (center_next_pipe_y - 150)
-        
-        if passed_upper_middle_2 or passed_lower_middle_2:
-            reward -= (3 + (150 / (middle_pipe_x + 1))) #wenn vogel sich dabei der x position der pipe nähert, erhöht sich diese strafe
+        # Reward
+        reward = self.calculate_reward()
 
         # Kollision im Render-Modus
         if self.render and (pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
