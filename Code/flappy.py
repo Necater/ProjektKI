@@ -328,6 +328,7 @@ class FlappyGame:
             self.clock.tick(15)
         return self.get_state(), reward, self.done
     
+'''
 def play():
     game = FlappyGame()
     state = game.reset()
@@ -349,3 +350,4 @@ def play():
     pygame.quit()
          
 play()
+'''
