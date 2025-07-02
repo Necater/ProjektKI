@@ -1,6 +1,9 @@
 import gym
 from gym import spaces
 import numpy as np
+import pygame
+
+from flappy import FlappyGame
 
 class FlappyBirdEnv(gym.Env):
     def __init__(self, render=False):
