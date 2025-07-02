@@ -335,23 +335,23 @@ class FlappyGame:
         if self.render and (pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
             pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False, pygame.sprite.collide_mask)):
             self.done = True
-            reward = -10
+            reward += -20
 
         # Kollision im nicht Render-Modus
         if (pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
             pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False, pygame.sprite.collide_mask)):
             self.done = True
-            reward = -10  #wenn vogel mit boden oder pipe collidiert, strafe
+            reward += -20  #wenn vogel mit boden oder pipe collidiert, strafe
 
         # Spiel abbrechen wenn Vogel oben aus dem Bild rausfliegt
         if (self.bird.rect.y <= 0):
             self.done = True
-            reward = -10
+            reward += -20
 
         # Wenn vogel aus dem Spiel rausfliegt, Strafe und Spiel beenden
         if (is_off_screen(self.bird_group.sprites()[0])):
             self.done = True
-            reward = -10 
+            reward += -20
 
         # [OPTIMIERUNG] Rendering nur bei render=True
         if self.render:
