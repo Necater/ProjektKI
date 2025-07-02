@@ -213,7 +213,7 @@ class FlappyGame:
                 self.passed_pipes.append(pipe)
                 self.num_passed_pipes += 1
                 reward += 2
-                reward += self.reward_pipes_strike()  # Reward für das gestaffelte Durchqueren der Pipes
+                reward += math.log(self.reward_pipes_strike())  # Reward für das gestaffelte Durchqueren der Pipes
         return reward
     
     # Höherer Reward, wenn Vogel sich der Mitte der nächsten beiden Pipes nähert
@@ -335,17 +335,18 @@ class FlappyGame:
         if self.render and (pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
             pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False, pygame.sprite.collide_mask)):
             self.done = True
-            reward += -20
 
         # Kollision im nicht Render-Modus
         if (pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False, pygame.sprite.collide_mask) or
             pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False, pygame.sprite.collide_mask)):
             self.done = True
-            reward += -20  #wenn vogel mit boden oder pipe collidiert, strafe
 
         # Spiel abbrechen wenn Vogel oben aus dem Bild rausfliegt
         if (self.bird.rect.y <= 0):
             self.done = True
+
+        # Wenn Vogel mit Boden oder Pipe kollidiert, oder aus dem Bildschirm fliegt, dann Strafe
+        if self.done:
             reward += -20
 
         # Wenn vogel aus dem Spiel rausfliegt, Strafe und Spiel beenden
