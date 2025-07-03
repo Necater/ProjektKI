@@ -354,14 +354,13 @@ class FlappyGame:
         if (self.bird.rect.y <= 0):
             self.done = True
 
-        # Wenn Vogel mit Boden oder Pipe kollidiert, oder aus dem Bildschirm fliegt, dann Strafe
-        if self.done:
-            reward += -20
-
         # Wenn vogel aus dem Spiel rausfliegt, Strafe und Spiel beenden
         if (is_off_screen(self.bird_group.sprites()[0])):
             self.done = True
-            reward += -20
+
+        # Wenn Vogel mit Boden oder Pipe kollidiert, oder aus dem Bildschirm fliegt, dann Strafe
+        if self.done:
+            reward += -50
 
         # [OPTIMIERUNG] Rendering nur bei render=True
         if self.render:
@@ -376,7 +375,7 @@ class FlappyGame:
             self.clock.tick(15)
 
         return self.get_state(), reward, self.done
-    
+
 '''
 def play():
     game = FlappyGame()
@@ -391,11 +390,10 @@ def play():
                     gesamtReward += reward
                     continue
     
-
         state, reward, done = game.step(0)
         gesamtReward += reward
-        #print(gesamtReward)
-        print(reward)
+        print(gesamtReward)
+        #print(reward)
     pygame.quit()
          
 play()
