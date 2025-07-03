@@ -234,7 +234,7 @@ class FlappyGame:
 
         #print(distance)
 
-        return 100 / (distance + 1)  # Je näher der Vogel an der Mitte der Pipe ist, desto höher der Reward
+        return 50 / (distance + 1)  # Je näher der Vogel an der Mitte der Pipe ist, desto höher der Reward
     
     # Reward, wenn sich der Vogel mittig im Bildschirm befindet und falls er zu sehr am Rand ist, gibt es eine Strafe
     def reward_for_vertical_position(self):
@@ -259,7 +259,7 @@ class FlappyGame:
         #print(self.bird.rect.centery)
 
         if passed_lower_middle or passed_upper_middle:
-            return -(3 + (100 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+            return -(3 + (50 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
         else:
             return 0
 
@@ -281,7 +281,7 @@ class FlappyGame:
         #print(self.bird.rect.centery)
 
         if passed_lower_middle_2 or passed_upper_middle_2:
-            return -(3 + (100 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+            return -(3 + (50 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
         else:
             return 0
         
@@ -394,8 +394,8 @@ def play():
     
         state, reward, done = game.step(0)
         gesamtReward += reward
-        #print(gesamtReward)
-        print(reward)
+        print(gesamtReward)
+        #print(reward)
     pygame.quit()
          
 play()
