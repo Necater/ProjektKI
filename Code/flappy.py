@@ -269,7 +269,7 @@ class FlappyGame:
 
         middle_pipe_x = abs(self.bird.rect.centerx - upper_next_pipe.rect.centerx)
 
-        # Zweiter Ansatz (die Mitte einer Pipe wird nun anhand des Mittelpunktes beider Pipes betrachtet)
+        # Zweiter Ansatz (die mittlere Grenze einer Pipe wird nun anhand des Mittelpunktes beider Pipes betrachtet)
         center_next_pipe_y = (upper_next_pipe.rect.bottom + lower_next_pipe.rect.top) / 2
 
         passed_lower_middle_2 = self.bird.rect.centery >= (center_next_pipe_y + 150)
