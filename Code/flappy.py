@@ -208,12 +208,13 @@ class FlappyGame:
     # Reward sofort nach dem Durchqueren einer Pipe
     def reward_for_passing_pipes(self):
         reward = 0
-        for pipe in self.pipe_group:
-            if pipe.rect.right < self.bird.rect.left and pipe not in self.passed_pipes:
-                self.passed_pipes.append(pipe)
-                self.num_passed_pipes += 1
-                reward += 10
-                reward += math.log(self.reward_pipes_strike())  # Reward für das gestaffelte Durchqueren der Pipes
+        pipes = self.pipe_group.sprites()
+        lower_next_pipe = pipes[0]
+        if lower_next_pipe.rect.right < self.bird.rect.left and lower_next_pipe not in self.passed_pipes:
+            self.passed_pipes.append(lower_next_pipe)
+            self.num_passed_pipes += 1
+            reward += 10
+            reward += math.log(self.reward_pipes_strike())  # Reward für das gestaffelte Durchqueren der Pipes
         return reward
     
     # Höherer Reward, wenn Vogel sich der Mitte der nächsten beiden Pipes nähert
