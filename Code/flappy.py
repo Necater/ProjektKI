@@ -213,8 +213,8 @@ class FlappyGame:
         if lower_next_pipe.rect.right < self.bird.rect.left and lower_next_pipe not in self.passed_pipes:
             self.passed_pipes.append(lower_next_pipe)
             reward += 10
-            #reward += math.log(self.reward_pipes_strike())  # Reward für das gestaffelte Durchqueren der Pipes
-            reward += self.reward_pipes_strike()
+            reward += math.log(self.reward_pipes_strike())  # Reward für das gestaffelte Durchqueren der Pipes
+            #reward += self.reward_pipes_strike()
             self.num_passed_pipes += 1
         return reward
     
