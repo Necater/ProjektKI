@@ -213,8 +213,8 @@ class FlappyGame:
         if lower_next_pipe.rect.right < self.bird.rect.left and lower_next_pipe not in self.passed_pipes:
             self.passed_pipes.append(lower_next_pipe)
             reward += 10
-            reward += math.log(self.reward_pipes_strike())  # Reward für das gestaffelte Durchqueren der Pipes
-            #reward += self.reward_pipes_strike()
+            #reward += math.log(self.reward_pipes_strike())  # Reward für das gestaffelte Durchqueren der Pipes
+            reward += self.reward_pipes_strike()
             self.num_passed_pipes += 1
         return reward
     
@@ -249,7 +249,7 @@ class FlappyGame:
         lower_next_pipe = pipes[0]
         upper_next_pipe = pipes[1]
 
-        middle_pipe_x = abs(self.bird.rect.centerx - upper_next_pipe.rect.centerx)
+        middle_pipe_x = abs(self.bird.rect.right - upper_next_pipe.rect.left)
 
         passed_lower_middle = self.bird.rect.centery >= lower_next_pipe.rect.centery  # Problem hierbei: Es wird nicht richtig die Mitte der Pipe betrachtet
         passed_upper_middle = self.bird.rect.centery <= upper_next_pipe.rect.centery  # Wahrscheinlich liegt es daran, dass die Mitte der Sprite des Pipes betrachtet wird
@@ -259,7 +259,7 @@ class FlappyGame:
         #print(self.bird.rect.centery)
 
         if passed_lower_middle or passed_upper_middle:
-            return -(3 + (150 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+            return -(3 + (100 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
         else:
             return 0
 
@@ -269,7 +269,7 @@ class FlappyGame:
         lower_next_pipe = pipes[0]
         upper_next_pipe = pipes[1]
 
-        middle_pipe_x = abs(self.bird.rect.centerx - upper_next_pipe.rect.centerx)
+        middle_pipe_x = abs(self.bird.rect.right - upper_next_pipe.rect.left)
 
         # Zweiter Ansatz (die mittlere Grenze einer Pipe wird nun anhand des Mittelpunktes beider Pipes betrachtet)
         center_next_pipe_y = (upper_next_pipe.rect.bottom + lower_next_pipe.rect.top) / 2
@@ -281,7 +281,7 @@ class FlappyGame:
         #print(self.bird.rect.centery)
 
         if passed_lower_middle_2 or passed_upper_middle_2:
-            return -(3 + (150 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+            return -(3 + (100 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
         else:
             return 0
         
@@ -394,8 +394,8 @@ def play():
     
         state, reward, done = game.step(0)
         gesamtReward += reward
-        print(gesamtReward)
-        #print(reward)
+        #print(gesamtReward)
+        print(reward)
     pygame.quit()
          
 play()
