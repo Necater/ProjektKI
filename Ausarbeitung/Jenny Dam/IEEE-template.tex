@@ -79,7 +79,7 @@ Im Zusammenhang mit der Gestaltung von Belohnungen ist es wichtig, zwischen Rewa
 \subsection{Reward Design}\label{reward_design}
 Für das Training des Agenten wurden drei grundlegende Belohnungsmethoden implementiert, die das Verhalten gezielt in Richtung eines erfolgreichen Spiels lenken sollen.\\
 
-\subsubsection{Belohnung für das Überleben}\label{reward_design_first}
+\subsubsection{Reward für das Überleben}\label{reward_design_first}
 Der Agent erhält für jeden Frame, den er überlebt, eine kleine positive Belohnung, in unserem Fall +0.1. Diese kontinuierliche Belohnung motiviert den Agenten dazu, möglichst lange im Spiel zu bleiben und risikoreiche Aktionen zu vermeiden.
 \begin{equation}
 	r_{\text{exist}}(t) = 0{,}1
@@ -87,7 +87,7 @@ Der Agent erhält für jeden Frame, den er überlebt, eine kleine positive Beloh
 
 wobei \( t \in \mathbb{N} \) der aktuelle Zeitschritt ist.\\
 
-\subsubsection{Belohnung für das Durchqueren einer Röhre}\label{reward_design_second}
+\subsubsection{Reward für das Durchqueren einer Röhre}\label{reward_design_second}
 Sobald der Agent erfolgreich eine Röhre passiert, wird eine größere positive Belohnung vergeben, in unserem Fall beträgt dieser Wert +10. Diese Belohnung fördert das Hauptziel des Spiels, möglichst lange am Leben zu bleiben, indem Röhren erfolgreich passiert werden und verstärkt gezielt die dafür notwendigen Aktionen.
 \begin{equation}
 	r_{\text{pipe}}(t) =
@@ -106,7 +106,7 @@ Ursprünglich trat die Belohnung für das erfolgreiche Passieren einer Röhre er
 \paragraph{Lösung}
 Das Problem wurde durch eine direkte Prüfung der Position der Röhren relativ zum Vogel behoben. Statt zu warten, bis die Röhren vollständig aus dem Bildschirm verschwunden sind, wird für eine der nächsten Röhren, in unserem Fall die untere Röhre, geprüft, ob deren rechte Kante links vom linken Rand des Vogels liegt. Sobald diese Bedingung erfüllt und die Röhre noch nicht als passiert gezählt wurde, wird sofort die Belohnung von +10 vergeben und die Röhre als passiert markiert. Dieses Markieren ist wichtig, damit die Röhre im nächsten Frame nicht erneut als passiert gilt und kein doppelter Reward vergeben wird. Dadurch erfolgt die Belohnung unmittelbar nach dem Durchqueren der Röhre, was ein zeitnahes und klares Feedback für den Agenten gewährleistet.\\
 
-\subsubsection{Bestrafung für den Tod}\label{reward_design_third}
+\subsubsection{Reward für den Tod}\label{reward_design_third}
 Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bildschirm verlässt und erhält in diesem Fall eine negative Belohnung von -50. Diese Bestrafung signalisiert klar, dass das Verhalten, das zum Tod geführt hat, unerwünscht ist und der Agent soll so lernen, ein vorzeitiges Scheitern zu vermeiden.
 \begin{equation}
 	\text{r}_{\text{death}}(t) =
@@ -128,7 +128,7 @@ Um das Lernverhalten des Agenten zu verbessern und den Trainingsprozess effizien
 
 Im Folgenden wird erläutert, welche konkreten Funktionen zur Umsetzung des Reward Shapings im Flappy-Bird-Environment eingesetzt wurden. Diese Funktionen zielen darauf ab, dem Agenten das Erlernen stabiler Flugbewegungen zu erleichtern, gefährliche Spielsituationen zu vermeiden und präzise durch die Öffnungen zwischen den Röhren zu navigieren.\\
 
-\subsubsection{Belohnung für das gestaffelte Durchqueren von Röhren}\label{reward_shaping_first}
+\subsubsection{Reward für das gestaffelte Durchqueren von Röhren}\label{reward_shaping_first}
 Zusätzlich zur standardmäßigen Belohnung für das vollständige Passieren einer Röhre wird in dieser Methode ein schrittweiser Fortschritts-Reward eingeführt. Dieser orientiert sich an der Gesamtanzahl der bereits durchquerten Röhren seit Spielbeginn. Dadurch erhält der Agent eine kontinuierliche Rückmeldung über seinen Spielfortschritt, was ihn dazu anregt, nicht nur einzelne Röhren zu überwinden, sondern möglichst dauerhaft im Spiel zu bleiben und regelmäßig neue Röhren zu passieren.
 \begin{equation}
 	r_{\text{progress}}(t) = N_{\text{passed}}(t)
@@ -141,7 +141,7 @@ Alternativ zum linearen Anstieg kann auch ein logarithmischer Reward verwendet w
 	r_{\text{progress}}(t) = \log\big(N_{\text{passed}}(t) + 1\big)
 \end{equation}
 
-\subsubsection{Belohnung für die Annäherung der Mitte zweier Röhren}\label{reward_shaping_second}
+\subsubsection{Reward für die Annäherung der Mitte zweier Röhren}\label{reward_shaping_second}
 Diese Belohnung zielt darauf ab, den Agenten dazu zu bringen, eine Position mit dem Vogel anzustreben, die sich exakt zwischen den beiden Röhren befindet, um eine erfolgreiche Passage der Röhren zu unterstützen.
 
 Dazu wird zunächst der Mittelpunkt zwischen den Röhren ermittelt. Anschließend wird die euklidische Distanz des Vogels zu diesem Mittelpunkt berechnet. Die Belohnung steigt mit abnehmendem Abstand, sodass eine präzise Positionierung in der Mitte gefördert wird.
