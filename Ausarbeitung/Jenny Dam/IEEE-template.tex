@@ -192,6 +192,9 @@ Der erste Ansatz dazu bestand darin, die vom Spiel definierten Mittelpunkte der 
 \paragraph{Problem mit den Koordinaten}
 Dabei handelte es sich jedoch nicht um die Mittelpunkte der im sichtbaren Spielfeld dargestellten Röhrenöffnungen, sondern um die Mittelpunkte der vollständigen Sprite-Grafiken, deren Koordinaten zum Teil außerhalb des sichtbaren Bereichs lagen. Dadurch war der daraus berechnete Zielbereich für den Agenten ungeeignet.
 
+\paragraph{Lösung}
+Im zweiten Ansatz wird der mittlere Bereich daher anhand des zuvor berechneten Mittelpunkts \( M \) zwischen den beiden Röhren festgelegt. Zur Definition eines toleranten Bereichs wird eine vertikale Bandbreite von \(\pm150\) Pixeln um diesen Mittelpunkt gelegt. Verlässt der Vogel diesen Bereich nach oben oder unten, wird eine negative Belohnung vergeben, um übermäßige vertikale Abweichungen zu vermeiden und den Vogel zentriert zwischen den Röhren zu halten.
+
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
 separate text file. Complete all content and organizational editing before 
