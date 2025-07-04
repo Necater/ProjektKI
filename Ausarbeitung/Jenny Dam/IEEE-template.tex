@@ -119,10 +119,11 @@ Dadurch erfolgt die Belohnung unmittelbar nach dem Durchqueren der Röhre, was e
 \subsubsection{Reward für den Tod}\label{reward_design_third}
 Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bildschirm verlässt und erhält in diesem Fall eine negative Belohnung von -50. Diese Bestrafung signalisiert klar, dass das Verhalten, das zum Tod geführt hat, unerwünscht ist und der Agent soll so lernen, ein vorzeitiges Scheitern zu vermeiden.
 \begin{equation}
+	\small
 	\text{r}_{\text{death}}(t) =
 	\begin{cases}
 		-50, & \text{bei Kollision mit Boden oder Röhre} \\
-		-50, & \text{wenn } y_{\text{bird}} < 0 \\
+		-50, & \text{wenn } y_{\text{b}} < 0 \\
 		0,    & \text{sonst}
 	\end{cases}
 \end{equation}
@@ -131,7 +132,7 @@ Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bild
 Zu Beginn trat das Problem auf, dass der Vogel durch wiederholtes Flattern ungehindert aus dem oberen Bildschirmrand fliegen konnte. Da dies zunächst nicht überprüft wurde, lief das Spiel einfach weiter, obwohl sich der Vogel bereits außerhalb des sichtbaren Bereichs befand. 
 
 \paragraph{Lösung}
-Dieses Verhalten wurde behoben, indem eine zusätzliche Bedingung eingeführt wurde. Wenn die vertikale Position des Vogels \( y_{\text{bird}} < 0 \) ist, wird das Spiel nun korrekt als verloren gewertet und beendet.
+Dieses Verhalten wurde behoben, indem eine zusätzliche Bedingung eingeführt wurde. Wenn die vertikale Position des Vogels \( y_{\text{b}} < 0 \) ist, wird das Spiel nun korrekt als verloren gewertet und beendet.
 
 \subsection{Reward Shaping}\label{reward_shaping}
 Um das Lernverhalten des Agenten zu verbessern und den Trainingsprozess effizienter zu gestalten, wurde das grundlegende Belohnungssystem durch Reward Shaping erweitert. Dabei erhält der Agent zusätzliche Belohnungen oder Bestrafungen, die ihm während des Spiels kontinuierlich Rückmeldung über sein aktuelles Verhalten geben. Dadurch soll er nicht nur langfristig erfolgreiche Strategien erlernen, sondern bereits während des Trainingsverlaufes gezielt in Richtung sinnvoller Handlungen gelenkt werden.
