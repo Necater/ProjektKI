@@ -117,6 +117,12 @@ Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bild
 	\end{cases}
 \end{equation}
 
+\paragraph{Problem des Rausfliegens des Vogels}
+Zu Beginn trat das Problem auf, dass der Vogel durch wiederholtes Flattern ungehindert aus dem oberen Bildschirmrand fliegen konnte. Da dies zunächst nicht überprüft wurde, lief das Spiel einfach weiter, obwohl sich der Vogel bereits außerhalb des sichtbaren Bereichs befand. 
+
+\paragraph{Lösung}
+Dieses Verhalten wurde behoben, indem eine zusätzliche Bedingung eingeführt wurde. Wenn die vertikale Position des Vogels \( y_{\text{bird}} < 0 \) ist, wird das Spiel nun korrekt als verloren gewertet und beendet.
+
 \subsection{Reward Shaping}\label{reward_shaping}
 
 \section{Prepare Your Paper Before Styling}
