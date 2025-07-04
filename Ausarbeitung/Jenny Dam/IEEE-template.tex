@@ -179,7 +179,7 @@ Basierend auf dieser Distanz wird der Reward festgelegt.
 
 Dabei ist es so, dass je geringer die euklidische Distanz ist, desto höher fällt der Reward aus. Der konstante Faktor 50 dient der Skalierung der Reward-Werte. Da der Vogel in der Praxis so gut wie nie exakt im Mittelpunkt der Lücke positioniert ist, wird der theoretische Maximalwert von 50 mit sehr niedriger Wahrscheinlichkeit erreicht. Dadurch bleiben die tatsächlichen Belohnungswerte in der Regel deutlich darunter und bewegen sich in einem moderaten Bereich.\\
 
-\subsubsection{Belohnung für die Position innerhalb eines mittleren Bereichs}\label{reward_shaping_third}
+\subsubsection{Reward für die Position innerhalb eines mittleren Bereichs}\label{reward_shaping_third}
 Um das Flugverhalten des Vogels weiter zu stabilisieren, wird eine weitere Belohnung integriert, die darauf abzielt, den Vogel möglichst konstant in einem definierten mittleren vertikalen Bereich zwischen den Röhren zu halten. Dies verhindert, dass der Agent ständig große vertikale Bewegungen macht, was zu einem stabileren Flug und einem geringeren Risiko für Kollisionen führt. Gleichzeitig soll diese Belohnung auch dafür sorgen, dass der Vogel des Agenten nicht aus dem Bildschirm fliegt. 
 
 Der erste Ansatz dazu bestand darin, die vom Spiel definierten Mittelpunkte der oberen und unteren Röhre als vertikale Grenzen festzulegen.
@@ -200,7 +200,9 @@ Je näher sich der Vogel diesem Punkt nähert, desto stärker fällt die Strafe 
 	r_{\text{penalty}}(t) = -\left(1 + \frac{50}{\mathrm{diff}\bigl(x_b^{\text{rechts}}(t), x_1^{\text{links}}(t)\bigr) + 1}\right)
 \end{equation}
 
-Dies soll verhindern, dass der Agent zu spät oder mit abrupten Bewegungen reagiert und stattdessen ein vorausschauenderes Flugverhalten fördern.
+Dies soll verhindern, dass der Agent zu spät oder mit abrupten Bewegungen reagiert und stattdessen ein vorausschauenderes Flugverhalten fördern.\\
+
+\subsubsection{Reward für eine kritische Position am Rand}\label{reward_shaping_four}
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
