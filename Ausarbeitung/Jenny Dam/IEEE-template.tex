@@ -90,7 +90,7 @@ wobei \( t \in \mathbb{N} \) der aktuelle Zeitschritt ist.\\
 \subsubsection{Reward für das Durchqueren einer Röhre}\label{reward_design_second}
 Sobald der Agent erfolgreich eine Röhre passiert, wird eine größere positive Belohnung in Höhe von \( +10 \) vergeben. Diese Belohnung fördert das Hauptziel des Spiels, möglichst lange am Leben zu bleiben, indem Röhren erfolgreich passiert werden und verstärkt gezielt die dafür notwendigen Aktionen.
 \begin{equation}
-	r_{\text{pipe}}(t) =
+	r_{\text{pass}}(t) =
 	\begin{cases}
 		10, & \begin{array}[t]{l}
 			\text{wenn die Röhre bei Schritt } t \\
@@ -104,7 +104,17 @@ Sobald der Agent erfolgreich eine Röhre passiert, wird eine größere positive 
 Ursprünglich trat die Belohnung für das erfolgreiche Passieren einer Röhre erst dann auf, wenn die vorherigen Röhren das Sichtfeld vollständig verlassen hatten. Das führte dazu, dass der Reward verspätet und nicht unmittelbar nach dem tatsächlichen Passieren der Röhre vergeben wurde. Dieses verzögerte Feedback erschwerte das Lernen des Agenten, da er nicht zeitnah für die korrekte Aktion belohnt wurde.
 
 \paragraph{Lösung}
-Das Problem wurde durch eine direkte Prüfung der Position der Röhren relativ zum Vogel behoben. Statt zu warten, bis die Röhren vollständig aus dem Bildschirm verschwunden sind, wird für eine der nächsten Röhren, in unserem Fall die untere Röhre, geprüft, ob deren rechte Kante links vom linken Rand des Vogels liegt. Sobald diese Bedingung erfüllt und die Röhre noch nicht als passiert gezählt wurde, wird sofort die Belohnung von +10 vergeben und die Röhre als passiert markiert. Dieses Markieren ist wichtig, damit die Röhre im nächsten Frame nicht erneut als passiert gilt und kein doppelter Reward vergeben wird. Dadurch erfolgt die Belohnung unmittelbar nach dem Durchqueren der Röhre, was ein zeitnahes und klares Feedback für den Agenten gewährleistet.\\
+Das Problem wurde durch eine direkte Prüfung der Position der Röhren relativ zum Vogel behoben. Statt zu warten, bis die Röhren vollständig aus dem Bildschirm verschwunden sind, wird für eine der nächsten Röhren, in unserem Fall die untere Röhre, geprüft, ob deren rechte Kante \((x_2^{\text{rechts}})\) links vom linken Rand des Vogels \((x_b^{\text{links}})\) liegt. Sobald diese Bedingung erfüllt und die Röhre noch nicht als passiert gezählt wurde, wird sofort die Belohnung von +10 vergeben und die Röhre als passiert markiert. Dieses Markieren ist wichtig, damit die Röhre im nächsten Frame nicht erneut als passiert gilt und kein doppelter Reward vergeben wird. 
+\begin{equation}
+	\small
+	r_{\text{pass}}(t) =
+	\begin{cases}
+		10, & \text{wenn } x_2^{\text{rechts}}(t) < x_b^{\text{links}}(t) \text{ und } \neg \text{passed}(x_2) \\
+		0,  & \text{sonst}
+	\end{cases}
+\end{equation}
+
+Dadurch erfolgt die Belohnung unmittelbar nach dem Durchqueren der Röhre, was ein zeitnahes und klares Feedback für den Agenten gewährleistet.\\
 
 \subsubsection{Reward für den Tod}\label{reward_design_third}
 Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bildschirm verlässt und erhält in diesem Fall eine negative Belohnung von -50. Diese Bestrafung signalisiert klar, dass das Verhalten, das zum Tod geführt hat, unerwünscht ist und der Agent soll so lernen, ein vorzeitiges Scheitern zu vermeiden.
