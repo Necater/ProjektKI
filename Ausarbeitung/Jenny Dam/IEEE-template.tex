@@ -149,13 +149,11 @@ Dazu wird zunächst der Mittelpunkt zwischen den Röhren ermittelt. Anschließen
 Seien die Positionen der Röhren im zweidimensionalen Raum durch ihre Begrenzungen gegeben. Die obere Röhre hat eine linke \(x\)-Koordinate \(x_1^{\text{links}}\) und eine rechte \(x\)-Koordinate \(x_1^{\text{rechts}}\), die untere Röhre entsprechend \(x_2^{\text{links}}\) und \(x_2^{\text{rechts}}\). Für die \(y\)-Koordinaten bezeichnen \(y_1^{\text{oben}}\) und \(y_1^{\text{unten}}\) das obere beziehungsweise untere Ende der oberen Röhre, während \(y_2^{\text{oben}}\) und \(y_2^{\text{unten}}\) entsprechend das obere und untere Ende der unteren Röhre angeben.
 
 Der \(x\)-Wert des Mittelpunkts berechnet sich als arithmetisches Mittel der linken und rechten Begrenzung der oberen Röhre.
-
 \begin{equation}
 	x_M = \frac{x_1^{\text{links}} + x_1^{\text{rechts}}}{2}.
 \end{equation}
 
 Der \(y\)-Wert des Mittelpunkts ergibt sich aus dem Mittelwert der unteren \(y\)-Koordinate der oberen Röhre und der oberen \(y\)-Koordinate der unteren Röhre.
-
 \begin{equation}
 	y_M = \frac{y_1^{\text{unten}} + y_2^{\text{oben}}}{2}.
 \end{equation}
@@ -163,21 +161,18 @@ Der \(y\)-Wert des Mittelpunkts ergibt sich aus dem Mittelwert der unteren \(y\)
 Im weiteren Schritt wird die euklidische Distanz des Vogels zu diesem Mittelpunkt \(M\) berechnet. 
 
 Die euklidische Distanz, auch bekannt als L2-Norm\footnote{L2-Distanzmaße berechnen die Gesamtdistanz, indem sie das Quadrat der Differenz jeder einzelnen Komponente zweier Vektoren berücksichtigen. \cite[S. 15]{prasath_distance_2019}} oder Lineal-Distanz, ist eine Erweiterung des Satzes von Pythagoras \cite[S. 10]{prasath_distance_2019}. Sie misst die Luftliniendistanz zwischen zwei Punkten \( x_i \) und \( x_j \) in einem \( n \)-dimensionalen Raum $\mathbb{R}^n$ \cite[S. 719]{madhulatha_overview_2012} \cite[S. 2]{mussabayev_optimizing_2024}.
-
 \begin{equation}
 	d(x_i, x_j) = \|x_i - x_j\| = \sqrt{ \sum_{k=1}^{n} (x_{ik} - x_{jk})^2 }
 	\label{eq:euklidische_distanz}
 \end{equation}
 
 Im Flappy Bird Environment repräsentiert \( b = (x_b, y_b) \) die mittlere Position des Vogels im zweidimensionalen Raum. Die euklidische Distanz zwischen dem Vogel \(b\) und dem Mittelpunkt \(M\) der beiden Röhren wird entsprechend Gleichung \ref{eq:euklidische_distanz} zu einem Zeitschritt \(t\) wie folgt bestimmt.
-
 \begin{equation}
 	\small
 	d(b(t), M(t)) = \sqrt{ \bigl(x_b(t) - x_M(t)\bigr)^2 + \bigl(y_b(t) - y_M(t)\bigr)^2}
 \end{equation}                 
                                  
 Basierend auf dieser Distanz wird der Reward festgelegt.
-
 \begin{equation}
 	r_{\text{distance}}(t) = \frac{50}{d(b(t), M(t)) + 1}
 \end{equation}
@@ -194,6 +189,18 @@ Dabei handelte es sich jedoch nicht um die Mittelpunkte der im sichtbaren Spielf
 
 \paragraph{Lösung}
 Im zweiten Ansatz wird der mittlere Bereich daher anhand des zuvor berechneten Mittelpunkts \( M \) zwischen den beiden Röhren festgelegt. Zur Definition eines toleranten Bereichs wird eine vertikale Bandbreite von \(\pm150\) Pixeln um diesen Mittelpunkt gelegt. Verlässt der Vogel diesen Bereich nach oben oder unten, wird eine negative Belohnung vergeben, um übermäßige vertikale Abweichungen zu vermeiden und den Vogel zentriert zwischen den Röhren zu halten.
+
+Die Höhe der Strafe hängt zusätzlich von der horizontalen Entfernung zur nächsten oberen Röhre ab. Dabei wird die horizontale Distanz als Differenz zwischen dem rechten \(x\)-Wert des Vogels (\(x_b^{\text{rechts}}\)) und dem linken \(x\)-Wert der nächsten oberen Röhre (\(x_1^{\text{links}}\)) zu einem Zeitschritt \(t\) berechnet.
+\begin{equation}
+	\mathrm{diff}\bigl(x_b^{\text{rechts}}(t), x_1^{\text{links}}(t)\bigr) = \left| x_b^{\text{rechts}}(t) - x_1^{\text{links}}(t) \right|
+\end{equation}
+
+Je näher sich der Vogel diesem Punkt nähert, desto stärker fällt die Strafe aus. 
+\begin{equation}
+	r_{\text{penalty}}(t) = -\left(1 + \frac{50}{\mathrm{diff}\bigl(x_b^{\text{rechts}}(t), x_1^{\text{links}}(t)\bigr) + 1}\right)
+\end{equation}
+
+Dies soll verhindern, dass der Agent zu spät oder mit abrupten Bewegungen reagiert und stattdessen ein vorausschauenderes Flugverhalten fördern.
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
