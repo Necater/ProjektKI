@@ -241,7 +241,7 @@ class FlappyGame:
         if 50 < self.bird.rect.centery < 450:
             return 0.5
         else:
-            return -1
+            return -2
         
      # Strafe nach dem Überschreiten der Mitte der Pipes erster Ansatz
     def penalty_for_passing_pipe_middle_first_approach(self):
@@ -259,7 +259,7 @@ class FlappyGame:
         #print(self.bird.rect.centery)
 
         if passed_lower_middle or passed_upper_middle:
-            return -(3 + (50 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+            return -(1 + (50 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
         else:
             return 0
 
@@ -281,7 +281,7 @@ class FlappyGame:
         #print(self.bird.rect.centery)
 
         if passed_lower_middle_2 or passed_upper_middle_2:
-            return -(3 + (50 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
+            return -(1 + (50 / (middle_pipe_x + 1)))  # Wenn Vogel sich dabei der X Position der Pipe nähert, erhöht sich diese Strafe
         else:
             return 0
         
