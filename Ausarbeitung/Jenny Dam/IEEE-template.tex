@@ -80,15 +80,15 @@ Im Zusammenhang mit der Gestaltung von Belohnungen ist es wichtig, zwischen Rewa
 Für das Training des Agenten wurden drei grundlegende Belohnungsmethoden implementiert, die das Verhalten gezielt in Richtung eines erfolgreichen Spiels lenken sollen.\\
 
 \subsubsection{Reward für das Überleben}\label{reward_design_first}
-Der Agent erhält für jeden Frame, den er überlebt, eine kleine positive Belohnung, in unserem Fall +0.1. Diese kontinuierliche Belohnung motiviert den Agenten dazu, möglichst lange im Spiel zu bleiben und risikoreiche Aktionen zu vermeiden.
+Der Agent erhält für jeden Frame, den er überlebt, eine kleine positive Belohnung, in diesem Fall beträgt sie \( +0{.}1 \). Diese kontinuierliche Belohnung motiviert den Agenten dazu, möglichst lange im Spiel zu bleiben und risikoreiche Aktionen zu vermeiden.
 \begin{equation}
-	r_{\text{exist}}(t) = 0{,}1
+	r_{\text{exist}}(t) = 0{.}1
 \end{equation}
 
 wobei \( t \in \mathbb{N} \) der aktuelle Zeitschritt ist.\\
 
 \subsubsection{Reward für das Durchqueren einer Röhre}\label{reward_design_second}
-Sobald der Agent erfolgreich eine Röhre passiert, wird eine größere positive Belohnung vergeben, in unserem Fall beträgt dieser Wert +10. Diese Belohnung fördert das Hauptziel des Spiels, möglichst lange am Leben zu bleiben, indem Röhren erfolgreich passiert werden und verstärkt gezielt die dafür notwendigen Aktionen.
+Sobald der Agent erfolgreich eine Röhre passiert, wird eine größere positive Belohnung in Höhe von \( +10 \) vergeben. Diese Belohnung fördert das Hauptziel des Spiels, möglichst lange am Leben zu bleiben, indem Röhren erfolgreich passiert werden und verstärkt gezielt die dafür notwendigen Aktionen.
 \begin{equation}
 	r_{\text{pipe}}(t) =
 	\begin{cases}
@@ -209,7 +209,7 @@ Formal lässt sich die Belohnung \( r_{\text{edge}}(t) \) in Abhängigkeit der v
 \begin{equation}
 	r_{\text{edge}}(t) =
 	\begin{cases}
-		\;\;\;0{,}5, & \text{wenn } 50 < y_b(t) < 450 \\
+		\;\;\;0{.}5, & \text{wenn } 50 < y_b(t) < 450 \\
 		-2, & \text{sonst}
 	\end{cases}
 \end{equation}
