@@ -111,8 +111,8 @@ Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bild
 \begin{equation}
 	\text{r}_{\text{death}} =
 	\begin{cases}
-		-100, & \text{bei Kollision mit Boden oder Röhre} \\
-		-100, & \text{wenn } y_{\text{bird}} < 0 \\
+		-50, & \text{bei Kollision mit Boden oder Röhre} \\
+		-50, & \text{wenn } y_{\text{bird}} < 0 \\
 		0,    & \text{sonst}
 	\end{cases}
 \end{equation}
@@ -124,6 +124,24 @@ Zu Beginn trat das Problem auf, dass der Vogel durch wiederholtes Flattern ungeh
 Dieses Verhalten wurde behoben, indem eine zusätzliche Bedingung eingeführt wurde. Wenn die vertikale Position des Vogels \( y_{\text{bird}} < 0 \) ist, wird das Spiel nun korrekt als verloren gewertet und beendet.
 
 \subsection{Reward Shaping}\label{reward_shaping}
+Um das Lernverhalten des Agenten zu verbessern und den Trainingsprozess effizienter zu gestalten, wurde das grundlegende Belohnungssystem durch Reward Shaping erweitert. Dabei erhält der Agent zusätzliche Belohnungen oder Bestrafungen, die ihm während des Spiels kontinuierlich Rückmeldung über sein aktuelles Verhalten geben. Dadurch soll er nicht nur langfristig erfolgreiche Strategien erlernen, sondern bereits während des Trainingsverlaufes gezielt in Richtung sinnvoller Handlungen gelenkt werden.
+
+Im Folgenden wird erläutert, welche konkreten Funktionen zur Umsetzung des Reward Shapings im Flappy-Bird-Environment eingesetzt wurden. Diese Funktionen zielen darauf ab, dem Agenten das Erlernen stabiler Flugbewegungen zu erleichtern, gefährliche Spielsituationen zu vermeiden und präzise durch die Öffnungen zwischen den Röhren zu navigieren.
+
+\subsubsection{Belohnung für das gestaffelte Durchqueren von Röhren}\label{reward_shaping_first}
+Zusätzlich zur standardmäßigen Belohnung für das vollständige Passieren einer Röhre wird in dieser Methode ein schrittweiser Fortschritts-Reward eingeführt. Dieser orientiert sich an der Gesamtanzahl der bereits durchquerten Röhren seit Spielbeginn. Dadurch erhält der Agent eine kontinuierliche Rückmeldung über seinen Spielfortschritt, was ihn dazu anregt, nicht nur einzelne Röhren zu überwinden, sondern möglichst dauerhaft im Spiel zu bleiben und regelmäßig neue Röhren zu passieren.
+\begin{equation}
+	r_{\text{progress}}(t) = N_{\text{passed}}(t)
+\end{equation}
+
+wobei \( N_{\text{passed}}(t) \in \mathbb{N}_0 \) die Anzahl der seit Spielbeginn erfolgreich durchquerten Röhren zum Zeitpunkt \( t \) darstellt.\\
+
+Alternativ zum linearen Anstieg kann auch ein logarithmischer Reward verwendet werden, um den gestaffelten Bonus im späteren Verlauf des Spiels langsamer wachsen zu lassen und somit eine nicht zu hohe Steigerung des Rewards bei vielen durchquerten Röhren zu erreichen.
+\begin{equation}
+	r_{\text{progress}}(t) = \log\big(N_{\text{passed}}(t) + 1\big)
+\end{equation}
+
+\subsubsection{Belohnung für die Annäherung der Mitte zweier Röhren}\label{reward_shaping_second}
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
