@@ -77,7 +77,36 @@ Eine gut gestaltete Reward-Funktion ist daher entscheidend für den Lernerfolg i
 Im Zusammenhang mit der Gestaltung von Belohnungen ist es wichtig, zwischen Reward Design und Reward Shaping zu unterscheiden. Während Reward Design die grundlegende Festlegung der Belohnungsstruktur umfasst, beschäftigt sich Reward Shaping mit der gezielten Verfeinerung dieser Struktur, um das Lernen effizienter zu gestalten. Zunächst wird im Folgenden das Reward Design im Flappy-Bird-Environment vorgestellt, zusammen mit den dafür verwendeten Funktionen. Danach folgt die Betrachtung des Reward Shaping und der dabei eingesetzten Methoden im Kontext der Lernumgebung.
 
 \subsection{Reward Design}\label{reward_design}
+Für das Training des Agenten wurden drei grundlegende Belohnungsmethoden implementiert, die das Verhalten gezielt in Richtung eines erfolgreichen Spiels lenken sollen.\\
 
+\subsubsection{Belohnung für das Überleben}\label{reward_design_first}
+Der Agent erhält für jeden Frame, den er überlebt, eine kleine positive Belohnung, in unserem Fall +0.1. Diese kontinuierliche Belohnung motiviert den Agenten dazu, möglichst lange im Spiel zu bleiben und risikoreiche Aktionen zu vermeiden.
+\begin{equation}
+	r_{\text{exist}}(t) = 0{,}1
+\end{equation}
+
+wobei \( t \in \mathbb{N} \) der aktuelle Zeitschritt ist.\\
+
+\subsubsection{Belohnung für das Durchqueren einer Röhre}\label{reward_design_second}
+Sobald der Agent erfolgreich eine Röhre passiert, wird eine größere positive Belohnung vergeben, in unserem Fall beträgt dieser Wert +10. Diese Belohnung fördert das Hauptziel des Spiels, möglichst lange am Leben zu bleiben, indem Röhren erfolgreich passiert werden und verstärkt gezielt die dafür notwendigen Aktionen.
+\begin{equation}
+	r_{\text{pipe}}(t) =
+	\begin{cases}
+		10, & \begin{array}[t]{l}
+			\text{wenn die Röhre bei Schritt } t \\
+			\text{erfolgreich passiert wurde}
+		\end{array} \\
+		0, & \text{sonst}
+	\end{cases}
+\end{equation}
+
+\paragraph{Problem der verzögerten Belohnung}
+Ursprünglich trat die Belohnung für das erfolgreiche Passieren einer Röhre erst dann auf, wenn die vorherigen Röhren das Sichtfeld vollständig verlassen hatten. Das führte dazu, dass der Reward verspätet und nicht unmittelbar nach dem tatsächlichen Passieren der Röhre vergeben wurde. Dieses verzögerte Feedback erschwerte das Lernen des Agenten, da er nicht zeitnah für die korrekte Aktion belohnt wurde.
+
+\paragraph{Lösung}
+Das Problem wurde durch eine direkte Prüfung der Position der Röhren relativ zum Vogel behoben. Statt zu warten, bis die Röhren vollständig aus dem Bildschirm verschwunden sind, wird für eine der nächsten Röhren, in unserem Fall die untere Röhre, geprüft, ob deren rechte Kante links vom linken Rand des Vogels liegt. Sobald diese Bedingung erfüllt und die Röhre noch nicht als passiert gezählt wurde, wird sofort die Belohnung von +10 vergeben und die Röhre als passiert markiert. Dieses Markieren ist wichtig, damit die Röhre im nächsten Frame nicht erneut als passiert gilt und kein doppelter Reward vergeben wird. Dadurch erfolgt die Belohnung unmittelbar nach dem Durchqueren der Röhre, was ein zeitnahes und klares Feedback für den Agenten gewährleistet.\\
+
+\subsubsection{Bestrafung für den Tod}\label{reward_design_third}
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
