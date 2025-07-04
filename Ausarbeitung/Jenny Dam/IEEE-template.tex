@@ -203,6 +203,18 @@ Je näher sich der Vogel diesem Punkt nähert, desto stärker fällt die Strafe 
 Dies soll verhindern, dass der Agent zu spät oder mit abrupten Bewegungen reagiert und stattdessen ein vorausschauenderes Flugverhalten fördern.\\
 
 \subsubsection{Reward für eine kritische Position am Rand}\label{reward_shaping_four}
+Ergänzend zu dem vorherigen Reward, die den Vogel in einem mittleren vertikalen Bereich zwischen den Röhren halten soll, wird eine weitere Maßnahme eingeführt, um insbesondere kritische Positionen am oberen und unteren Rand des Bildschirms zu vermeiden. Dieser Reward berücksichtigt dabei ausschließlich die vertikale Position des Vogels. Befindet sich sein Mittelpunkt innerhalb eines sicheren Bereichs, wird eine positive Belohnung vergeben. Verlässt er diesen Bereich, folgt eine stärkere Bestrafung. 
+
+Formal lässt sich die Belohnung \( r_{\text{edge}}(t) \) in Abhängigkeit der vertikalen Bildschirmposition \( y_b(t) \) des Vogels zu einem Zeitpunkt \( t \) folgendermaßen beschreiben.
+\begin{equation}
+	r_{\text{edge}}(t) =
+	\begin{cases}
+		\;\;\;0{,}5, & \text{wenn } 50 < y_b(t) < 450 \\
+		-2, & \text{sonst}
+	\end{cases}
+\end{equation}
+
+Der gewählte Schwellenbereich von 50 bis 450 Pixeln wurde so definiert, dass er eine sichere Distanz zu den potenziell tödlichen Bildschirmrändern bietet. Diese Belohnung zielt insbesondere darauf ab, Situationen zu vermeiden, in denen sich der Vogel bereits sehr nah am oberen oder unteren Rand befindet, da in solchen kritischen Positionen der Vogel kurz vor dem Kontakt mit dem Boden oder dem oberen Bildschirmrand steht und die Gefahr des Scheiterns besonders hoch ist. Durch die zusätzliche Strafe in diesen Fällen lernt der Agent, solche Randlagen stärker zu vermeiden. Dadurch soll das Verhalten des Agenten robuster und sicherheitsorientierter werden.
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
