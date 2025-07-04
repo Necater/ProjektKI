@@ -160,14 +160,17 @@ Der \(y\)-Wert des Mittelpunkts ergibt sich aus dem Mittelwert der unteren \(y\)
 	M_y = \frac{y_1^{\text{unten}} + y_2^{\text{oben}}}{2}.
 \end{equation}
 
-Im weiteren Schritt wird der euklidische Abstand des Vogels zu diesem Mittelpunkt \(M\) berechnet. 
+Im weiteren Schritt wird die euklidische Distanz des Vogels zu diesem Mittelpunkt \(M\) berechnet. 
 
-Die allgemeine Gleichung zur Berechnung der euklidischen Distanz lautet wie folgt.
+Die euklidische Distanz, auch bekannt als L2-Norm\footnote{L2-Distanzmaße berechnen die Gesamtdistanz, indem sie das Quadrat der Differenz jeder einzelnen Komponente zweier Vektoren berücksichtigen. \cite[S. 15]{prasath_distance_2019}} oder Lineal-Distanz, ist eine Erweiterung des Satzes von Pythagoras \cite[S. 10]{prasath_distance_2019}. Sie misst die Luftliniendistanz zwischen zwei Punkten \( x_i \) und \( x_j \) in einem \( n \)-dimensionalen Raum $\mathbb{R}^n$ \cite[S. 719]{madhulatha_overview_2012} \cite[S. 2]{mussabayev_optimizing_2024}.
 
 \begin{equation}
 	d(x_i, x_j) = \|x_i - x_j\| = \sqrt{ \sum_{k=1}^{n} (x_{ik} - x_{jk})^2 }
 	\label{eq:euklidische_distanz}
 \end{equation}
+
+Im Flappy Bird Environment repräsentiert \( x = (x_b, y_b) \) die mittlere Position des Vogels im zweidimensionalen Raum.
+
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
