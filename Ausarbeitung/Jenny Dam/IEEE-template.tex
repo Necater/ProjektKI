@@ -144,20 +144,20 @@ Alternativ zum linearen Anstieg kann auch ein logarithmischer Reward verwendet w
 \subsubsection{Belohnung für die Annäherung der Mitte zweier Röhren}\label{reward_shaping_second}
 Diese Belohnung zielt darauf ab, den Agenten dazu zu bringen, eine Position anzustreben, die sich exakt zwischen den beiden Röhren befindet, um eine erfolgreiche Passage der Röhren zu unterstützen.
 
-Dazu wird zunächst der Mittelpunkt zwischen den Röhren ermittelt. Anschließend wird der euklidische Abstand des Vogels zu diesem Mittelpunkt berechnet. Die Belohnung steigt mit abnehmendem Abstand, sodass eine präzise Positionierung in der Mitte gefördert wird.
+Dazu wird zunächst der Mittelpunkt zwischen den Röhren ermittelt. Anschließend wird die euklidische Distanz des Vogels zu diesem Mittelpunkt berechnet. Die Belohnung steigt mit abnehmendem Abstand, sodass eine präzise Positionierung in der Mitte gefördert wird.
 
 Seien die Positionen der Röhren im zweidimensionalen Raum durch ihre Begrenzungen gegeben. Die obere Röhre hat eine linke \(x\)-Koordinate \(x_1^{\text{links}}\) und eine rechte \(x\)-Koordinate \(x_1^{\text{rechts}}\), die untere Röhre entsprechend \(x_2^{\text{links}}\) und \(x_2^{\text{rechts}}\). Für die \(y\)-Koordinaten bezeichnen \(y_1^{\text{oben}}\) und \(y_1^{\text{unten}}\) das obere beziehungsweise untere Ende der oberen Röhre, während \(y_2^{\text{oben}}\) und \(y_2^{\text{unten}}\) entsprechend das obere und untere Ende der unteren Röhre angeben.
 
 Der \(x\)-Wert des Mittelpunkts berechnet sich als arithmetisches Mittel der linken und rechten Begrenzung der oberen Röhre.
 
 \begin{equation}
-	M_x = \frac{x_1^{\text{links}} + x_1^{\text{rechts}}}{2}.
+	x_M = \frac{x_1^{\text{links}} + x_1^{\text{rechts}}}{2}.
 \end{equation}
 
 Der \(y\)-Wert des Mittelpunkts ergibt sich aus dem Mittelwert der unteren \(y\)-Koordinate der oberen Röhre und der oberen \(y\)-Koordinate der unteren Röhre.
 
 \begin{equation}
-	M_y = \frac{y_1^{\text{unten}} + y_2^{\text{oben}}}{2}.
+	y_M = \frac{y_1^{\text{unten}} + y_2^{\text{oben}}}{2}.
 \end{equation}
 
 Im weiteren Schritt wird die euklidische Distanz des Vogels zu diesem Mittelpunkt \(M\) berechnet. 
@@ -169,8 +169,22 @@ Die euklidische Distanz, auch bekannt als L2-Norm\footnote{L2-Distanzmaße berec
 	\label{eq:euklidische_distanz}
 \end{equation}
 
-Im Flappy Bird Environment repräsentiert \( b = (x_b, y_b) \) die mittlere Position des Vogels im zweidimensionalen Raum.
+Im Flappy Bird Environment repräsentiert \( b = (x_b, y_b) \) die mittlere Position des Vogels im zweidimensionalen Raum. Die euklidische Distanz zwischen dem Vogel \(b\) und dem Mittelpunkt \(M\) der beiden Röhren wird entsprechend Gleichung \ref{eq:euklidische_distanz} zu einem Zeitschritt \(t\) wie folgt bestimmt.
 
+\begin{equation}
+	\small
+	d(b(t), M(t)) = \sqrt{ \bigl(x_b(t) - x_M(t)\bigr)^2 + \bigl(y_b(t) - y_M(t)\bigr)^2}
+\end{equation}                 
+                                 
+Basierend auf dieser Distanz wird der Reward festgelegt.
+
+\begin{equation}
+	r_{\text{distance}}(t) = \frac{50}{d(b(t), M(t)) + 1}
+\end{equation}
+
+Dabei ist es so, dass je geringer die euklidische Distanz ist, desto höher fällt der Reward aus. Der konstante Faktor 50 dient der Skalierung der Reward-Werte. Da der Vogel in der Praxis so gut wie nie exakt im Mittelpunkt der Lücke positioniert ist, wird der theoretische Maximalwert von 50 mit sehr niedriger Wahrscheinlichkeit erreicht. Dadurch bleiben die tatsächlichen Belohnungswerte in der Regel deutlich darunter und bewegen sich in einem moderaten Bereich.\\
+
+\subsubsection{Belohnung für die Position innerhalb eines mittleren Bereichs}\label{reward_shaping_third}
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
