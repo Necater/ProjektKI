@@ -142,7 +142,7 @@ Alternativ zum linearen Anstieg kann auch ein logarithmischer Reward verwendet w
 \end{equation}
 
 \subsubsection{Belohnung für die Annäherung der Mitte zweier Röhren}\label{reward_shaping_second}
-Diese Belohnung zielt darauf ab, den Agenten dazu zu bringen, eine Position anzustreben, die sich exakt zwischen den beiden Röhren befindet, um eine erfolgreiche Passage der Röhren zu unterstützen.
+Diese Belohnung zielt darauf ab, den Agenten dazu zu bringen, eine Position mit dem Vogel anzustreben, die sich exakt zwischen den beiden Röhren befindet, um eine erfolgreiche Passage der Röhren zu unterstützen.
 
 Dazu wird zunächst der Mittelpunkt zwischen den Röhren ermittelt. Anschließend wird die euklidische Distanz des Vogels zu diesem Mittelpunkt berechnet. Die Belohnung steigt mit abnehmendem Abstand, sodass eine präzise Positionierung in der Mitte gefördert wird.
 
@@ -185,6 +185,12 @@ Basierend auf dieser Distanz wird der Reward festgelegt.
 Dabei ist es so, dass je geringer die euklidische Distanz ist, desto höher fällt der Reward aus. Der konstante Faktor 50 dient der Skalierung der Reward-Werte. Da der Vogel in der Praxis so gut wie nie exakt im Mittelpunkt der Lücke positioniert ist, wird der theoretische Maximalwert von 50 mit sehr niedriger Wahrscheinlichkeit erreicht. Dadurch bleiben die tatsächlichen Belohnungswerte in der Regel deutlich darunter und bewegen sich in einem moderaten Bereich.\\
 
 \subsubsection{Belohnung für die Position innerhalb eines mittleren Bereichs}\label{reward_shaping_third}
+Um das Flugverhalten des Vogels weiter zu stabilisieren, wird eine weitere Belohnung integriert, die darauf abzielt, den Vogel möglichst konstant in einem definierten mittleren vertikalen Bereich zwischen den Röhren zu halten. Dies verhindert, dass der Agent ständig große vertikale Bewegungen macht, was zu einem stabileren Flug und einem geringeren Risiko für Kollisionen führt. Gleichzeitig soll diese Belohnung auch dafür sorgen, dass der Vogel des Agenten nicht aus dem Bildschirm fliegt. 
+
+Der erste Ansatz dazu bestand darin, die vom Spiel definierten Mittelpunkte der oberen und unteren Röhre als vertikale Grenzen festzulegen.
+
+\paragraph{Problem mit den Koordinaten}
+Dabei handelte es sich jedoch nicht um die Mittelpunkte der im sichtbaren Spielfeld dargestellten Röhrenöffnungen, sondern um die Mittelpunkte der vollständigen Sprite-Grafiken, deren Koordinaten zum Teil außerhalb des sichtbaren Bereichs lagen. Dadurch war der daraus berechnete Zielbereich für den Agenten ungeeignet.
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
