@@ -14,46 +14,30 @@
 
 \begin{document}
 
-\title{Conference Paper Title*\\
-{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured for https://ieeexplore.ieee.org  and
-should not be used}
-\thanks{Identify applicable funding agency here. If none, delete this.}
-}
+\title{Flappy Bird Environment\\}
 
-\author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
+\author{\IEEEauthorblockN{1\textsuperscript{st} Jenny Dam}
+\IEEEauthorblockA{\textit{Fachbereich: Informatik} \\
+\textit{Hochschule Trier}\\
+Trier, Deutschland \\
+jndm3502@hochschule-trier.de}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Julia Servatius}
+\IEEEauthorblockA{\textit{Fachbereich: Informatik} \\
+\textit{Hochschule Trier}\\
+Trier, Deutschland \\
 email address or ORCID}
 \and
-\IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
+\IEEEauthorblockN{3\textsuperscript{rd} Jakob Erens}
+\IEEEauthorblockA{\textit{Fachbereich: Informatik} \\
+\textit{Hochschule Trier}\\
+Trier, Deutschland \\
 email address or ORCID}
 \and
-\IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address or ORCID}
-\and
-\IEEEauthorblockN{4\textsuperscript{th} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address or ORCID}
-\and
-\IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address or ORCID}
-\and
-\IEEEauthorblockN{6\textsuperscript{th} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
+\IEEEauthorblockN{4\textsuperscript{th} Paulo Schmidt}
+\IEEEauthorblockA{\textit{Fachbereich: Technik} \\
+\textit{Hochschule Trier}\\
+Trier, Deutschland \\
 email address or ORCID}
 }
 
@@ -82,6 +66,18 @@ measures proportionately more than is customary. This measurement
 and others are deliberate, using specifications that anticipate your paper 
 as one part of the entire proceedings, and not as an independent document. 
 Please do not revise any of the current designations.
+
+\section{Rewards}
+Im Reinforcement Learning übernimmt der Reward eine bedeutende Funktion. Ein Reward ist eine Rückmeldung, die ein Agent aus seiner Umgebung erhält, nachdem er eine bestimmte Aktion ausgeführt hat. Diese Rückmeldung signalisiert dem Agenten, wie gut oder schlecht seine Aktion in Bezug auf das Erreichen eines definierten Ziels war.
+
+Die Hauptaufgabe der Reward-Funktion besteht darin, das Verhalten des Agenten zu steuern und zu lenken. Durch die Zuordnung von positiven Rewards für erwünschte Aktionen und negativen Rewards für unerwünschte Aktionen lernt der Agent schrittweise, welche Strategien am erfolgversprechendsten sind. So kann er seine Entscheidungen verbessern und schließlich optimale oder zumindest zufriedenstellende Handlungsfolgen entwickeln.
+
+Eine gut gestaltete Reward-Funktion ist daher entscheidend für den Lernerfolg im Reinforcement Learning. Sie definiert die Ziele des Lernprozesses und sorgt dafür, dass der Agent in der komplexen und oft unvorhersehbaren Umwelt die richtigen Verhaltensweisen erlernt. Im Fall des Flappy-Bird-Spiels besteht die Aufgabe darin, den Vogel so zu steuern, dass er möglichst lange überlebt und Hindernisse wie Röhren erfolgreich passiert.
+
+Im Zusammenhang mit der Gestaltung von Belohnungen ist es wichtig, zwischen Reward Design und Reward Shaping zu unterscheiden. Während Reward Design die grundlegende Festlegung der Belohnungsstruktur umfasst, beschäftigt sich Reward Shaping mit der gezielten Verfeinerung dieser Struktur, um das Lernen effizienter zu gestalten. Zunächst wird im Folgenden das Reward Design im Flappy-Bird-Environment vorgestellt, zusammen mit den dafür verwendeten Funktionen. Danach folgt die Betrachtung des Reward Shaping und der dabei eingesetzten Methoden im Kontext der Lernumgebung.
+
+\subsection{Reward Design}\label{reward_design}
+
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
