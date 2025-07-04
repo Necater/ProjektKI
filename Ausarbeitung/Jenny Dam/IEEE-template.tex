@@ -107,6 +107,17 @@ Ursprünglich trat die Belohnung für das erfolgreiche Passieren einer Röhre er
 Das Problem wurde durch eine direkte Prüfung der Position der Röhren relativ zum Vogel behoben. Statt zu warten, bis die Röhren vollständig aus dem Bildschirm verschwunden sind, wird für eine der nächsten Röhren, in unserem Fall die untere Röhre, geprüft, ob deren rechte Kante links vom linken Rand des Vogels liegt. Sobald diese Bedingung erfüllt und die Röhre noch nicht als passiert gezählt wurde, wird sofort die Belohnung von +10 vergeben und die Röhre als passiert markiert. Dieses Markieren ist wichtig, damit die Röhre im nächsten Frame nicht erneut als passiert gilt und kein doppelter Reward vergeben wird. Dadurch erfolgt die Belohnung unmittelbar nach dem Durchqueren der Röhre, was ein zeitnahes und klares Feedback für den Agenten gewährleistet.\\
 
 \subsubsection{Bestrafung für den Tod}\label{reward_design_third}
+Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bildschirm verlässt und erhält in diesem Fall eine negative Belohnung von -50. Diese Bestrafung signalisiert klar, dass das Verhalten, das zum Tod geführt hat, unerwünscht ist und der Agent soll so lernen, ein vorzeitiges Scheitern zu vermeiden.
+\begin{equation}
+	\text{r}_{\text{death}} =
+	\begin{cases}
+		-100, & \text{bei Kollision mit Boden oder Röhre} \\
+		-100, & \text{wenn } y_{\text{bird}} < 0 \\
+		0,    & \text{sonst}
+	\end{cases}
+\end{equation}
+
+\subsection{Reward Shaping}\label{reward_shaping}
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
