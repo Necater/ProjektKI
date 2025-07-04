@@ -126,7 +126,7 @@ Dieses Verhalten wurde behoben, indem eine zusätzliche Bedingung eingeführt wu
 \subsection{Reward Shaping}\label{reward_shaping}
 Um das Lernverhalten des Agenten zu verbessern und den Trainingsprozess effizienter zu gestalten, wurde das grundlegende Belohnungssystem durch Reward Shaping erweitert. Dabei erhält der Agent zusätzliche Belohnungen oder Bestrafungen, die ihm während des Spiels kontinuierlich Rückmeldung über sein aktuelles Verhalten geben. Dadurch soll er nicht nur langfristig erfolgreiche Strategien erlernen, sondern bereits während des Trainingsverlaufes gezielt in Richtung sinnvoller Handlungen gelenkt werden.
 
-Im Folgenden wird erläutert, welche konkreten Funktionen zur Umsetzung des Reward Shapings im Flappy-Bird-Environment eingesetzt wurden. Diese Funktionen zielen darauf ab, dem Agenten das Erlernen stabiler Flugbewegungen zu erleichtern, gefährliche Spielsituationen zu vermeiden und präzise durch die Öffnungen zwischen den Röhren zu navigieren.
+Im Folgenden wird erläutert, welche konkreten Funktionen zur Umsetzung des Reward Shapings im Flappy-Bird-Environment eingesetzt wurden. Diese Funktionen zielen darauf ab, dem Agenten das Erlernen stabiler Flugbewegungen zu erleichtern, gefährliche Spielsituationen zu vermeiden und präzise durch die Öffnungen zwischen den Röhren zu navigieren.\\
 
 \subsubsection{Belohnung für das gestaffelte Durchqueren von Röhren}\label{reward_shaping_first}
 Zusätzlich zur standardmäßigen Belohnung für das vollständige Passieren einer Röhre wird in dieser Methode ein schrittweiser Fortschritts-Reward eingeführt. Dieser orientiert sich an der Gesamtanzahl der bereits durchquerten Röhren seit Spielbeginn. Dadurch erhält der Agent eine kontinuierliche Rückmeldung über seinen Spielfortschritt, was ihn dazu anregt, nicht nur einzelne Röhren zu überwinden, sondern möglichst dauerhaft im Spiel zu bleiben und regelmäßig neue Röhren zu passieren.
@@ -142,6 +142,31 @@ Alternativ zum linearen Anstieg kann auch ein logarithmischer Reward verwendet w
 \end{equation}
 
 \subsubsection{Belohnung für die Annäherung der Mitte zweier Röhren}\label{reward_shaping_second}
+Diese Belohnung zielt darauf ab, den Agenten dazu zu bringen, eine Position anzustreben, die sich exakt zwischen den beiden Röhren befindet, um eine erfolgreiche Passage der Röhren zu unterstützen.
+
+Dazu wird zunächst der Mittelpunkt zwischen den Röhren ermittelt. Anschließend wird der euklidische Abstand des Vogels zu diesem Mittelpunkt berechnet. Die Belohnung steigt mit abnehmendem Abstand, sodass eine präzise Positionierung in der Mitte gefördert wird.
+
+Seien die Positionen der Röhren im zweidimensionalen Raum durch ihre Begrenzungen gegeben. Die obere Röhre hat eine linke \(x\)-Koordinate \(x_1^{\text{links}}\) und eine rechte \(x\)-Koordinate \(x_1^{\text{rechts}}\), die untere Röhre entsprechend \(x_2^{\text{links}}\) und \(x_2^{\text{rechts}}\). Für die \(y\)-Koordinaten bezeichnen \(y_1^{\text{oben}}\) und \(y_1^{\text{unten}}\) das obere beziehungsweise untere Ende der oberen Röhre, während \(y_2^{\text{oben}}\) und \(y_2^{\text{unten}}\) entsprechend das obere und untere Ende der unteren Röhre angeben.
+
+Der \(x\)-Wert des Mittelpunkts berechnet sich als arithmetisches Mittel der linken und rechten Begrenzung der oberen Röhre.
+
+\begin{equation}
+	M_x = \frac{x_1^{\text{links}} + x_1^{\text{rechts}}}{2}.
+\end{equation}
+
+Der \(y\)-Wert des Mittelpunkts ergibt sich aus dem Mittelwert der unteren \(y\)-Koordinate der oberen Röhre und der oberen \(y\)-Koordinate der unteren Röhre.
+
+\begin{equation}
+	M_y = \frac{y_1^{\text{unten}} + y_2^{\text{oben}}}{2}.
+\end{equation}
+
+Im weiteren Schritt wird der euklidische Abstand des Vogels zu diesem Mittelpunkt \(M\) berechnet. 
+Die Gleichung zur Berechnung der euklidischen Distanz lautet wie folgt.
+
+\begin{equation}
+	d(x_i, x_j) = \|x_i - x_j\| = \sqrt{ \sum_{k=1}^{n} (x_{ik} - x_{jk})^2 }
+	\label{eq:euklidische_distanz}
+\end{equation}
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
