@@ -109,7 +109,7 @@ Das Problem wurde durch eine direkte Prüfung der Position der Röhren relativ z
 \subsubsection{Bestrafung für den Tod}\label{reward_design_third}
 Der Agent stirbt, sobald er mit dem Boden, einer Röhre kollidiert oder den Bildschirm verlässt und erhält in diesem Fall eine negative Belohnung von -50. Diese Bestrafung signalisiert klar, dass das Verhalten, das zum Tod geführt hat, unerwünscht ist und der Agent soll so lernen, ein vorzeitiges Scheitern zu vermeiden.
 \begin{equation}
-	\text{r}_{\text{death}} =
+	\text{r}_{\text{death}}(t) =
 	\begin{cases}
 		-50, & \text{bei Kollision mit Boden oder Röhre} \\
 		-50, & \text{wenn } y_{\text{bird}} < 0 \\
