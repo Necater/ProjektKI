@@ -23,13 +23,13 @@ class Bird(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.images = [
-            pygame.image.load('assets/sprites/bluebird-upflap.png').convert_alpha(),
-            pygame.image.load('assets/sprites/bluebird-midflap.png').convert_alpha(),
-            pygame.image.load('assets/sprites/bluebird-downflap.png').convert_alpha()
+            pygame.image.load('Code/assets/sprites/bluebird-upflap.png').convert_alpha(),
+            pygame.image.load('Code/assets/sprites/bluebird-midflap.png').convert_alpha(),
+            pygame.image.load('Code/assets/sprites/bluebird-downflap.png').convert_alpha()
         ]
         self.speed = SPEED
         self.current_image = 0
-        self.image = pygame.image.load('assets/sprites/bluebird-upflap.png').convert_alpha()
+        self.image = pygame.image.load('Code/assets/sprites/bluebird-upflap.png').convert_alpha()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect[0] = SCREEN_WIDHT / 6
@@ -52,7 +52,7 @@ class Bird(pygame.sprite.Sprite):
 class Pipe(pygame.sprite.Sprite):
     def __init__(self, inverted, xpos, ysize):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('assets/sprites/pipe-green.png').convert_alpha()
+        self.image = pygame.image.load('Code/assets/sprites/pipe-green.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (PIPE_WIDHT, PIPE_HEIGHT))
         self.rect = self.image.get_rect()
         self.rect[0] = xpos
@@ -72,7 +72,7 @@ class Pipe(pygame.sprite.Sprite):
 class Ground(pygame.sprite.Sprite):
     def __init__(self, xpos):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('assets/sprites/base.png').convert_alpha()
+        self.image = pygame.image.load('Code/assets/sprites/base.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (GROUND_WIDHT, GROUND_HEIGHT))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
@@ -107,7 +107,7 @@ class FlappyGame:
 
         # [OPTIMIERUNG] Dummy-Hintergrund bei render=False
         if self.render:
-            self.BACKGROUND = pygame.image.load('assets/sprites/background-day.png')
+            self.BACKGROUND = pygame.image.load('Code/assets/sprites/background-day.png')
             self.BACKGROUND = pygame.transform.scale(self.BACKGROUND, (SCREEN_WIDHT, SCREEN_HEIGHT))
         else:
             self.BACKGROUND = pygame.Surface((1, 1))

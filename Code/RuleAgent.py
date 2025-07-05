@@ -79,6 +79,6 @@ if __name__ == "__main__":
     testagent = RuleAgent()
 
     print("\n=== Benchmark: ohme Rendern ===")
-    play(testagent, render=False)
+    play(testagent, render=True)
 
 
